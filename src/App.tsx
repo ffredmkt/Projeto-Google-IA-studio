@@ -36,7 +36,6 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
-  ChevronDown,
   Mail
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -706,6 +705,7 @@ export default function App() {
   const whatsappLink = "https://wa.me/5586981362434"; // Friedrich França WhatsApp
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
 
@@ -732,6 +732,18 @@ export default function App() {
     }, 5000);
     return () => clearInterval(timer);
   }, [currentIndex]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 400);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const testimonials = [
     {
@@ -1019,59 +1031,39 @@ export default function App() {
       <main id="main-content">
 
       {/* Hero Section */}
-      <section id="inicio" className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-screen flex items-center">
-        {/* Background Image with Overlay */}
+      <section id="inicio" className="relative pt-32 pb-24 overflow-hidden bg-[#0B1221]">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://iili.io/qskdKoF.jpg" 
-            alt="Mãe segurando bebê" 
-            className="w-full h-full object-cover"
+            alt="Mãe segurando um bebê" 
+            className="w-full h-full object-cover opacity-60 object-[75%_center] md:object-center"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1221]/95 via-[#0B1221]/80 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0B1221] via-transparent to-transparent opacity-60" />
+          <div className="absolute inset-0 bg-[#0B1221]/40 md:bg-gradient-to-r md:from-[#0B1221]/80 md:via-[#0B1221]/60 md:to-transparent" />
         </div>
-
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              <div className="flex items-center gap-3 mb-8">
-                <div className="w-16 h-16 flex items-center justify-center overflow-hidden rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 p-2">
-                  <img 
-                    src="https://iili.io/qgliKP9.jpg" 
-                    alt="Logo Friedrich França" 
-                    className="w-full h-full object-contain"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-                <span className="text-white font-bold text-xl uppercase tracking-tight">SALÁRIO MATERNIDADE</span>
+          <div className="flex flex-col items-center text-center">
+            <motion.div {...fadeIn} className="max-w-3xl">
+              <div className="w-32 h-32 flex items-center justify-center overflow-hidden mb-8 mx-auto rounded-3xl">
+                <img 
+                  src="https://iili.io/qgliKP9.jpg" 
+                  alt="Friedrich França Logo" 
+                  className="w-full h-full object-contain"
+                  referrerPolicy="no-referrer"
+                />
               </div>
-              <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-                Garanta o seu <span className="text-sky-400">Salário Maternidade</span> com Segurança e Agilidade
+              <h1 className="text-4xl md:text-6xl font-bold text-white leading-[1.1] tracking-tight mb-8">
+                Descubra se você tem direito a no mínimo R$ 6.484,00 de <span className="text-sky-400">Salário Maternidade.</span>
               </h1>
-              <p className="text-xl text-slate-300 mb-10 max-w-lg leading-relaxed">
-                Assessoria jurídica especializada para mães desempregadas, rurais e autônomas. Receba o que é seu por direito sem burocracia.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <button 
-                  onClick={() => setIsChatOpen(true)}
-                  className="bg-sky-500 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-sky-600 transition-all shadow-2xl shadow-sky-500/20 flex items-center justify-center gap-2 group"
-                >
-                  Consultar Meu Direito
-                  <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-                </button>
-                <div className="flex items-center gap-3 px-6 py-4 rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3].map((i) => (
-                      <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0B1221] bg-slate-400" />
-                    ))}
-                  </div>
-                  <span className="text-sm text-slate-300 font-medium">+500 mães atendidas</span>
-                </div>
+              
+              <FormularioAltaConversao whatsappLink={whatsappLink} />
+
+              <div className="flex flex-col items-center justify-center gap-4 mt-8">
+                <p className="text-sm text-slate-300 flex items-center gap-2">
+                  <ShieldCheck size={16} className="text-sky-400" />
+                  Consulta 100% segura e sigilosa
+                </p>
               </div>
             </motion.div>
           </div>
@@ -1081,136 +1073,169 @@ export default function App() {
       {/* Eligibility Section */}
       <section id="elegibilidade" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border border-slate-100">
+                <img 
+                  src="https://iili.io/qgWFxcP.jpg" 
+                  alt="Maternidade e Direitos" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1221] mb-4">Quem tem direito ao Salário Maternidade?</h2>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Muitas mães acreditam que não têm direito por estarem desempregadas ou trabalharem por conta própria. Veja se você se encaixa:
-              </p>
-            </motion.div>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { 
-                title: "Mães Desempregadas", 
-                desc: "Se você trabalhou com carteira assinada nos últimos anos, pode ter direito.",
-                icon: <Users className="text-sky-500" size={32} />
-              },
-              { 
-                title: "Trabalhadoras Rurais", 
-                desc: "Seguradas especiais que trabalham na agricultura ou pesca.",
-                icon: <MapPin className="text-sky-500" size={32} />
-              },
-              { 
-                title: "MEI e Autônomas", 
-                desc: "Mães que contribuem por conta própria para o INSS.",
-                icon: <Briefcase className="text-sky-500" size={32} />
-              }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:shadow-xl transition-all"
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1221] mb-8 leading-tight">
+                Você pode ter direito ao benefício se:
+              </h2>
+              <ul className="space-y-5 mb-10">
+                {[
+                  "Está grávida ou teve bebê recentemente",
+                  "Teve o benefício negado nos últimos 5 anos (Cabe Revisão!)",
+                  "Trabalhou como MEI ou Autônoma (Sem carência de 10 meses!)",
+                  "Mora e trabalha na zona rural ou urbana",
+                  "Está desempregada há menos de 3 anos"
+                ].map((item, idx) => (
+                  <motion.li 
+                    key={idx}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    viewport={{ once: true }}
+                    className="flex items-start gap-4 group"
+                  >
+                    <div className="mt-1 w-6 h-6 rounded-full bg-sky-50 flex items-center justify-center text-sky-600 group-hover:bg-sky-600 group-hover:text-white transition-colors">
+                      <CheckCircle2 size={16} />
+                    </div>
+                    <span className="text-lg text-slate-700 font-medium">{item}</span>
+                  </motion.li>
+                ))}
+              </ul>
+              <a 
+                href="#form-consulta"
+                className="inline-flex items-center gap-2 text-sky-600 font-bold text-lg hover:underline decoration-2 underline-offset-8"
               >
-                <div className="mb-6">{item.icon}</div>
-                <h3 className="text-xl font-bold text-[#0B1221] mb-4">{item.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-16 bg-sky-50 rounded-3xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white">
-                <CheckCircle2 size={24} />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-[#0B1221]">Ainda tem dúvidas?</h4>
-                <p className="text-slate-600">Faça uma consulta gratuita agora mesmo.</p>
-              </div>
-            </div>
-            <button 
-              onClick={() => setIsChatOpen(true)}
-              className="bg-[#0B1221] text-white px-8 py-4 rounded-2xl font-bold hover:bg-slate-900 transition-all shadow-lg"
-            >
-              Verificar Meu Direito
-            </button>
+                CLIQUE AQUI E VERIFIQUE SEU DIREITO
+                <ArrowRight size={20} />
+              </a>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Urgency Section */}
       <section className="py-20 bg-[#0B1221] text-white overflow-hidden relative">
+        <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
+          <div className="absolute top-10 left-10 w-64 h-64 border border-white rounded-full" />
+          <div className="absolute bottom-10 right-10 w-96 h-96 border border-white rounded-full" />
+        </div>
         <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            <div className="w-16 h-16 bg-sky-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Clock className="text-sky-400" size={32} />
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Atenção: O tempo é o seu maior inimigo</h2>
-            <p className="text-lg text-slate-300 mb-10 leading-relaxed">
-              Muitas mães perdem o benefício simplesmente por não saberem que existe um prazo rigoroso. Não deixe para depois o que você pode garantir hoje.
+            <Clock className="mx-auto mb-6 text-sky-400" size={48} />
+            <h2 className="text-2xl md:text-3xl font-bold mb-6 uppercase tracking-wider">
+              Importante: Existe um prazo para solicitar o salário maternidade
+            </h2>
+            <p className="text-lg md:text-xl text-slate-300 mb-10 leading-relaxed">
+              Muitas mães acabam perdendo o benefício porque não sabem que existe um prazo para fazer a solicitação. Se o pedido não for feito dentro do período correto, o benefício pode não ser concedido.
             </p>
-            <button 
-              onClick={() => setIsChatOpen(true)}
-              className="bg-sky-500 hover:bg-sky-600 text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg shadow-sky-500/20"
+            <a 
+              href="#form-consulta"
+              className="inline-block bg-sky-500 text-white px-10 py-4 rounded-2xl font-bold text-lg hover:bg-sky-600 transition-colors shadow-lg"
             >
-              Verificar meu Prazo Agora
-            </button>
+              Quero saber agora se tenho direito
+            </a>
           </motion.div>
         </div>
       </section>
 
       {/* How it Works */}
-      <section id="como-funciona" className="py-24 bg-slate-50">
+      <section id="como-funciona" className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              className="space-y-12"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1221] mb-4">Como funciona o processo?</h2>
-              <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Nosso método é simples, rápido e totalmente online. Você não precisa sair de casa.
-              </p>
-            </motion.div>
-          </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-[#0B1221] leading-tight">Como funciona a análise</h2>
+              
+              <div className="space-y-10">
+                {[
+                  {
+                    title: "Você clica no botão abaixo e fala com nossos especialistas no Whatsapp",
+                    icon: <Handshake size={32} />
+                  },
+                  {
+                    title: "Verificamos se você tem direito ao benefício e regularizamos sua situação no INSS para você receber o Salário Maternidade.",
+                    icon: <Search size={32} />
+                  },
+                  {
+                    title: "Acompanhamos até que você receba o benefício.",
+                    icon: <Calendar size={32} />
+                  }
+                ].map((step, idx) => (
+                  <motion.div 
+                    key={idx} 
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.15 }}
+                    viewport={{ once: true }}
+                    className="flex gap-6 group"
+                  >
+                    <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-sky-50 flex items-center justify-center text-sky-600 group-hover:bg-sky-600 group-hover:text-white transition-all duration-300 shadow-sm">
+                      {step.icon}
+                    </div>
+                    <div className="space-y-2 flex-grow">
+                      <p className="text-lg md:text-xl text-slate-700 font-medium leading-relaxed">
+                        {step.title}
+                      </p>
+                      {idx < 2 && <div className="pt-8 border-b border-slate-100 w-full" />}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
 
-          <div className="grid md:grid-cols-4 gap-8 relative">
-            <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-sky-100 -translate-y-1/2 z-0" />
-            {[
-              { step: "01", title: "Consulta Grátis", desc: "Analisamos seu caso via WhatsApp." },
-              { step: "02", title: "Documentação", desc: "Enviamos a lista do que é necessário." },
-              { step: "03", title: "Protocolo", desc: "Damos entrada no seu pedido no INSS." },
-              { step: "04", title: "Recebimento", desc: "Você recebe o dinheiro na sua conta." }
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="relative z-10 bg-white p-8 rounded-3xl border border-slate-100 text-center shadow-sm"
-              >
-                <div className="w-12 h-12 bg-sky-500 text-white rounded-full flex items-center justify-center font-bold mx-auto mb-6 shadow-lg shadow-sky-500/20">
-                  {item.step}
-                </div>
-                <h3 className="text-xl font-bold text-[#0B1221] mb-4">{item.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed">{item.desc}</p>
-              </motion.div>
-            ))}
+              <div className="pt-4">
+                <a 
+                  href="#form-consulta"
+                  className="inline-block bg-[#0B1221] text-white px-10 py-4 rounded-full font-bold text-sm uppercase tracking-wider hover:bg-slate-800 transition-all shadow-lg active:scale-95"
+                >
+                  RECEBA SEU ATENDIMENTO AGORA
+                </a>
+              </div>
+            </motion.div>
+
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="relative"
+            >
+              <div className="rounded-[40px] overflow-hidden shadow-2xl border-8 border-slate-50">
+                <img 
+                  src="https://iili.io/qrK3LGt.jpg" 
+                  alt="Processo de Análise" 
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -1372,7 +1397,7 @@ export default function App() {
       </section>
 
       {/* Testimonials Section */}
-      <section id="depoimentos" className="py-24 bg-slate-50">
+      <section id="depoimentos" className="py-24 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.div
@@ -1380,21 +1405,31 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1221] mb-4">O que as mães dizem sobre nós</h2>
+              <div className="inline-flex items-center gap-2 bg-sky-50 px-4 py-2 rounded-full mb-6 border border-sky-100">
+                <div className="flex gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} size={14} className="fill-sky-500 text-sky-500" />
+                  ))}
+                </div>
+                <span className="text-sm font-bold text-sky-700">100% de Satisfação</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1221] mb-4">
+                O que dizem as nossas clientes
+              </h2>
               <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-                Confira os depoimentos de quem já conquistou o Salário Maternidade com a nossa ajuda.
+                Milhares de mães já garantiram seus direitos com a nossa consultoria especializada.
               </p>
             </motion.div>
           </div>
 
           <div className="relative max-w-5xl mx-auto">
-            <div className="flex items-center gap-8">
+            <div className="flex items-center gap-4">
               <button 
                 onClick={() => paginate(-1)}
-                className="hidden md:flex p-6 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-sky-500 hover:text-white transition-all shadow-xl active:scale-95 z-10 hover:-translate-x-1"
+                className="hidden md:flex p-4 rounded-full bg-white border border-slate-200 text-slate-600 hover:bg-sky-500 hover:text-white transition-all shadow-lg active:scale-95 z-10"
                 aria-label="Depoimento anterior"
               >
-                <ChevronLeft size={28} />
+                <ChevronLeft size={24} />
               </button>
 
               <div className="flex-1 overflow-hidden" aria-live="polite">
@@ -1526,45 +1561,37 @@ export default function App() {
       </section>
 
       {/* FAQ Section */}
-      <section id="duvidas" className="py-24 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="duvidas" className="py-24 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#0B1221] mb-4">Dúvidas Frequentes</h2>
-            <p className="text-lg text-slate-600">
-              Tire suas principais dúvidas sobre o Salário Maternidade.
-            </p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0B1221] mb-4">
+                Dúvidas Frequentes
+              </h2>
+              <p className="text-lg text-slate-600">
+                Tudo o que você precisa saber sobre o Salário Maternidade.
+              </p>
+            </motion.div>
           </div>
 
           <div className="space-y-4">
             {faqData.map((item, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-              >
-                <details className="group bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden transition-all">
-                  <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
-                    <span className="font-bold text-[#0B1221] pr-4">{item.q}</span>
-                    <ChevronDown className="text-sky-500 group-open:rotate-180 transition-transform" size={20} />
-                  </summary>
-                  <div className="px-6 pb-6 text-slate-600 leading-relaxed">
-                    {item.a}
-                  </div>
-                </details>
-              </motion.div>
+              <FAQItem key={idx} question={item.q} answer={item.a} />
             ))}
           </div>
 
           <div className="mt-16 text-center">
-            <p className="text-slate-500 mb-6">Ainda tem dúvidas?</p>
+            <p className="text-slate-600 mb-6">Ainda tem alguma dúvida específica sobre o seu caso?</p>
             <button 
               onClick={() => setIsChatOpen(true)}
-              className="inline-flex items-center gap-2 bg-[#0B1221] text-white px-8 py-4 rounded-2xl font-bold hover:bg-slate-900 transition-all shadow-lg"
+              className="inline-flex items-center gap-2 bg-[#25D366] text-white px-8 py-4 rounded-full font-bold shadow-lg hover:bg-[#128C7E] transition-all hover:scale-105"
             >
-              Falar com um Especialista
-              <ArrowRight size={20} />
+              <WhatsAppIcon size={20} />
+              Tirar dúvidas no WhatsApp
             </button>
           </div>
         </div>
@@ -1572,60 +1599,79 @@ export default function App() {
 
       </main>
       {/* Footer */}
-      <footer className="bg-[#0B1221] text-white py-16">
+      <footer className="bg-[#0B1221] text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-3 gap-12 mb-12">
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-10 h-10 flex items-center justify-center overflow-hidden rounded-lg bg-white p-1">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+            <div className="col-span-2">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-16 h-16 flex items-center justify-center overflow-hidden rounded-2xl">
                   <img 
                     src="https://iili.io/qgliKP9.jpg" 
-                    alt="Logo Friedrich França" 
+                    alt="" 
                     className="w-full h-full object-contain"
                     referrerPolicy="no-referrer"
+                    aria-hidden="true"
                   />
                 </div>
                 <span className="text-xl font-bold uppercase tracking-tight">SALÁRIO MATERNIDADE</span>
               </div>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Dr. Friedrich França | OAB/PI Nº 16.220 e OAB/MA Nº 22356-A. <br />
-                Advocacia especializada em garantir o futuro de quem cuida.
+              <p className="text-slate-300 max-w-sm mb-8">
+                Dr. Friedrich França | OAB/PI Nº 16.220 e OAB/MA Nº 22356-A. Advogado Especialista em Direito Previdenciário com mais de 10 anos de experiência na obtenção de Salário Maternidade para mães de todo o Brasil.
               </p>
+              <nav className="flex gap-4" aria-label="Redes sociais e contato">
+                <a 
+                  href="https://instagram.com/friedrichfranca.adv" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-sky-500 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  aria-label="Siga-nos no Instagram"
+                >
+                  <Instagram size={18} aria-hidden="true" />
+                </a>
+                <button 
+                  onClick={() => setIsChatOpen(true)}
+                  className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-sky-500 transition-colors focus:outline-none focus:ring-2 focus:ring-sky-500"
+                  aria-label="Fale conosco no WhatsApp"
+                >
+                  <WhatsAppIcon size={18} aria-hidden="true" />
+                </button>
+              </nav>
             </div>
+            
             <div>
-              <h4 className="text-lg font-bold mb-6">Navegação</h4>
-              <ul className="space-y-3 text-slate-400">
-                <li><a href="#inicio" className="hover:text-sky-400 transition-colors">Início</a></li>
-                <li><a href="#elegibilidade" className="hover:text-sky-400 transition-colors">Elegibilidade</a></li>
-                <li><a href="#como-funciona" className="hover:text-sky-400 transition-colors">Como Funciona</a></li>
-                <li><a href="#sobre" className="hover:text-sky-400 transition-colors">Sobre</a></li>
-                <li><a href="#duvidas" className="hover:text-sky-400 transition-colors">Dúvidas</a></li>
+              <h4 className="font-bold mb-6 uppercase tracking-wider text-sm text-sky-400">Contato</h4>
+              <ul className="space-y-4 text-slate-300">
+                <li className="flex items-center gap-3">
+                  <Phone size={18} className="text-sky-400" aria-hidden="true" />
+                  <span>(86) 98136-2434</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Mail size={18} className="text-sky-400" aria-hidden="true" />
+                  <span className="text-sm">friedrichfrancaadvocacia@gmail.com</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Instagram size={18} className="text-sky-400" aria-hidden="true" />
+                  <a 
+                    href="https://www.instagram.com/friedrichfranca.adv/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm hover:text-sky-400 transition-colors"
+                  >
+                    @friedrichfranca.adv
+                  </a>
+                </li>
+                <li className="flex items-start gap-3">
+                  <MapPin size={18} className="text-sky-400 mt-1 flex-shrink-0" aria-hidden="true" />
+                  <span className="text-sm text-slate-300">Av Homero Castelo Branco, 1956, Sala 01, Horto, Teresina-PI, CEP: 64052-445</span>
+                </li>
               </ul>
             </div>
-            <div>
-              <h4 className="text-lg font-bold mb-6">Contato</h4>
-              <ul className="space-y-3 text-slate-400">
-                <li className="flex items-center gap-2">
-                  <Phone size={16} />
-                  (86) 98136-2434
-                </li>
-                <li className="flex items-center gap-2">
-                  <Mail size={16} />
-                  <span className="text-sm break-all">friedrichfrancaadvocacia@gmail.com</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <Instagram size={16} />
-                  <a href="https://instagram.com/friedrichfranca.adv" target="_blank" rel="noopener noreferrer" className="hover:text-sky-400 transition-colors">@friedrichfranca.adv</a>
-                </li>
-              </ul>
-            </div>
+
+
           </div>
-          <div className="pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-sm">
-            <p>© 2026 Dr. Friedrich França. Todos os direitos reservados.</p>
-            <div className="flex gap-6">
-              <a href="#" className="hover:text-white transition-colors">Termos de Uso</a>
-              <a href="#" className="hover:text-white transition-colors">Privacidade</a>
-            </div>
+          
+          <div className="pt-8 border-t border-slate-800 text-center text-slate-400 text-sm">
+            <p>© 2026 Dr. Friedrich França | OAB/PI Nº 16.220 e OAB/MA Nº 22356-A. Especialista em Salário Maternidade. Todos os direitos reservados. <br /><span className="text-[10px] opacity-50 uppercase tracking-widest">Última atualização: Março de 2026</span></p>
           </div>
         </div>
       </footer>
