@@ -1706,7 +1706,7 @@ export default function App() {
           </div>
           
           <div className="pt-8 border-t border-slate-800 text-center text-slate-400 text-sm">
-            <p>© 2026 Dr. Friedrich França | OAB/PI Nº 16.220 e OAB/MA Nº 22356-A. Especialista em Salário Maternidade. Todos os direitos reservados. <br /><span className="text-[10px] opacity-50 uppercase tracking-widest">Última atualização: Março de 2026</span></p>
+            <p>© 2026 Dr. Friedrich França | OAB/PI Nº 16.220 e OAB/MA Nº 22356-A. Especialista em Salário Maternidade. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
