@@ -506,6 +506,7 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
   } = useMultiStepForm(steps);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastAddedStepRef = useRef(0);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -517,16 +518,10 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
 
   // Sync messages with step changes
   useEffect(() => {
-    if (step > 0 && step < steps.length) {
+    if (step > 0 && step < steps.length && step !== lastAddedStepRef.current) {
       const botQuestion = steps[step].question;
-      // Check if the last message is already this question to avoid duplicates
-      setMessages(prev => {
-        const lastMsg = prev[prev.length - 1];
-        if (lastMsg && lastMsg.text === botQuestion && lastMsg.type === 'bot') {
-          return prev;
-        }
-        return [...prev, { type: 'bot', text: botQuestion }];
-      });
+      setMessages(prev => [...prev, { type: 'bot', text: botQuestion }]);
+      lastAddedStepRef.current = step;
     }
   }, [step, steps]);
 
