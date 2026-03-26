@@ -861,8 +861,8 @@ export default function App() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-24">
               {/* Logo */}
-              <a href="#inicio" className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-sky-500 rounded-lg p-1" aria-label="Início - Friedrich França Advocacia">
-                <div className="w-16 h-16 flex items-center justify-center overflow-hidden rounded-2xl">
+              <a href="#inicio" className="flex items-center gap-2 md:gap-3 focus:outline-none focus:ring-2 focus:ring-sky-500 rounded-lg p-1 shrink-0" aria-label="Início - Friedrich França Advocacia">
+                <div className="w-10 h-10 md:w-16 md:h-16 flex items-center justify-center overflow-hidden rounded-xl md:rounded-2xl">
                   <img 
                     src="https://iili.io/qgliKP9.jpg" 
                     alt="" 
@@ -872,8 +872,8 @@ export default function App() {
                   />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-lg md:text-xl font-bold tracking-tight text-[#0B1221] leading-none">SALÁRIO MATERNIDADE</span>
-                  <span className="text-[9px] md:text-[10px] uppercase tracking-[0.2em] text-sky-600 font-semibold">Advocacia Especializada</span>
+                  <span className="text-sm md:text-xl font-bold tracking-tight text-[#0B1221] leading-none">SALÁRIO MATERNIDADE</span>
+                  <span className="text-[7px] md:text-[10px] uppercase tracking-[0.1em] md:tracking-[0.2em] text-sky-600 font-semibold">Advocacia Especializada</span>
                 </div>
               </a>
 
@@ -893,15 +893,14 @@ export default function App() {
               </div>
 
               {/* CTA & Mobile Toggle */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 md:gap-4">
                 <button 
                   onClick={() => setIsChatOpen(true)}
-                  className="flex items-center gap-2 bg-[#0B1221] hover:bg-slate-800 text-white px-4 md:px-6 py-2.5 rounded-full font-bold text-xs md:text-sm transition-all shadow-md hover:shadow-lg active:scale-95 focus:outline-none focus:ring-4 focus:ring-sky-500/50"
+                  className="flex items-center gap-2 bg-[#0B1221] hover:bg-slate-800 text-white p-2.5 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm transition-all shadow-md hover:shadow-lg active:scale-95 focus:outline-none focus:ring-4 focus:ring-sky-500/50"
                   aria-label="Abrir chat de atendimento no WhatsApp"
                 >
                   <WhatsAppIcon size={16} aria-hidden="true" />
-                  <span className="hidden sm:inline">Falar no WhatsApp</span>
-                  <span className="sm:hidden">WhatsApp</span>
+                  <span className="hidden md:inline">Falar no WhatsApp</span>
                 </button>
                 
                 <button 
@@ -911,7 +910,7 @@ export default function App() {
                   aria-expanded={isMenuOpen}
                   aria-controls="mobile-menu"
                 >
-                  {isMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
+                  {isMenuOpen ? <X size={20} md:size={24} aria-hidden="true" /> : <Menu size={20} md:size={24} aria-hidden="true" />}
                 </button>
               </div>
             </div>
@@ -946,7 +945,7 @@ export default function App() {
                       setIsMenuOpen(false);
                     }
                   }}
-                  className="lg:hidden fixed top-0 right-0 bottom-0 w-[85%] max-w-sm bg-white z-[120] shadow-2xl flex flex-col touch-pan-y"
+                  className="lg:hidden fixed top-0 right-0 bottom-0 w-[85%] max-w-[320px] bg-white z-[120] shadow-2xl flex flex-col touch-pan-y overflow-hidden"
                   role="dialog"
                   aria-modal="true"
                   aria-label="Menu de navegação móvel"
