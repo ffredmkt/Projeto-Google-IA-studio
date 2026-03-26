@@ -558,7 +558,7 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="fixed bottom-20 right-4 left-4 md:left-auto md:right-6 md:bottom-24 w-auto md:w-[400px] h-[500px] max-h-[calc(100vh-120px)] bg-white rounded-3xl shadow-2xl z-[60] flex flex-col overflow-hidden border border-slate-100"
+          className="fixed bottom-4 right-4 left-4 md:left-auto md:right-6 md:bottom-24 w-auto md:w-[400px] h-[500px] max-h-[calc(100vh-40px)] md:max-h-[600px] bg-white rounded-3xl shadow-2xl z-[60] flex flex-col overflow-hidden border border-slate-100"
           role="dialog"
           aria-modal="true"
           aria-label="Assistente virtual Dr. Friedrich França"
@@ -587,7 +587,7 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
           </div>
 
           {/* Messages */}
-          <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-slate-50" role="log" aria-live="polite">
+          <div className="flex-grow overflow-y-auto p-4 space-y-4 bg-slate-50 scrollbar-thin scrollbar-thumb-slate-200" role="log" aria-live="polite">
             {messages.map((msg, idx) => (
               <motion.div
                 key={idx}
@@ -630,7 +630,7 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
           </div>
 
           {/* Input/Options */}
-          <div className="p-4 bg-white border-t border-slate-100">
+          <div className="p-4 bg-white border-t border-slate-100 safe-area-bottom">
             {!isCompleted ? (
               currentStep.type === "input" ? (
                 <div className="space-y-2">
@@ -640,7 +640,7 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
                       value={inputValue}
                       onChange={handleInputChange}
                       placeholder={currentStep.placeholder}
-                      className={`flex-grow bg-slate-50 border rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 transition-all ${
+                      className={`flex-grow bg-slate-50 border rounded-xl px-4 py-3 text-base md:text-sm focus:outline-none focus:ring-2 transition-all ${
                         error ? "border-red-500 focus:ring-red-500" : "border-slate-200 focus:ring-sky-500"
                       }`}
                       onKeyPress={(e) => e.key === 'Enter' && onNext(inputValue)}
@@ -650,7 +650,7 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
                     />
                     <button 
                       onClick={() => onNext(inputValue)}
-                      className="bg-sky-500 text-white p-2 rounded-xl hover:bg-sky-600 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-sky-500"
+                      className="bg-sky-500 text-white p-3 rounded-xl hover:bg-sky-600 transition-colors disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-sky-500 shrink-0"
                       disabled={isValidating}
                       aria-label="Enviar resposta"
                     >
@@ -673,12 +673,12 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
                   </AnimatePresence>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-2 max-h-[160px] overflow-y-auto pr-1" role="group" aria-label={currentStep.question}>
+                <div className="grid grid-cols-1 gap-2 max-h-[180px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200" role="group" aria-label={currentStep.question}>
                   {currentStep.options?.map((opt: string) => (
                     <button
                       key={opt}
                       onClick={() => onNext(opt)}
-                      className="text-left px-4 py-2 rounded-xl border border-slate-200 hover:border-sky-500 hover:bg-sky-50 text-sm text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500"
+                      className="text-left px-4 py-3 rounded-xl border border-slate-200 hover:border-sky-500 hover:bg-sky-50 text-base md:text-sm text-slate-600 transition-all focus:outline-none focus:ring-2 focus:ring-sky-500 active:bg-sky-100"
                     >
                       {opt}
                     </button>
