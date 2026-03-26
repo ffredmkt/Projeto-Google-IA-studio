@@ -154,6 +154,15 @@ function FormularioAltaConversao({ whatsappLink }: { whatsappLink: string }) {
     totalSteps
   } = useMultiStepForm(steps);
 
+  useEffect(() => {
+    if (isCompleted && typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Lead', {
+        content_name: 'Consulta Salário Maternidade',
+        status: 'Formulário Principal Concluído'
+      });
+    }
+  }, [isCompleted]);
+
   const handleSubmit = () => {
     const summary = Object.entries(data)
       .map(([key, val]) => {
@@ -164,6 +173,13 @@ function FormularioAltaConversao({ whatsappLink }: { whatsappLink: string }) {
 
     const msg = `Olá Dr. Friedrich, acabei de fazer a consulta no site.\n\n*Resumo da Consulta:*\n${summary}\n\nQuero saber se tenho direito ao salário maternidade.`;
     
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Contact', {
+        method: 'WhatsApp',
+        content_name: 'Formulário Principal'
+      });
+    }
+
     const lawyerNumber = "5586981362434";
     const url = `https://wa.me/${lawyerNumber}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
@@ -505,6 +521,15 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
     isCompleted
   } = useMultiStepForm(steps);
 
+  useEffect(() => {
+    if (isCompleted && typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Lead', {
+        content_name: 'Consulta Salário Maternidade',
+        status: 'ChatBot Concluído'
+      });
+    }
+  }, [isCompleted]);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const lastAddedStepRef = useRef(0);
 
@@ -542,6 +567,14 @@ function ChatBot({ isOpen, onClose, whatsappLink }: { isOpen: boolean, onClose: 
       .join("\n");
 
     const msg = `Olá Dr. Friedrich, acabei de fazer a consulta pelo chat do site.\n\n*Resumo da Consulta:*\n${summary}\n\nQuero saber se tenho direito ao salário maternidade.`;
+    
+    if (typeof window !== 'undefined' && (window as any).fbq) {
+      (window as any).fbq('track', 'Contact', {
+        method: 'WhatsApp',
+        content_name: 'ChatBot'
+      });
+    }
+
     const url = `https://wa.me/5586981362434?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank');
   };
@@ -890,7 +923,12 @@ export default function App() {
               {/* CTA & Mobile Toggle */}
               <div className="flex items-center gap-2 md:gap-4">
                 <button 
-                  onClick={() => setIsChatOpen(true)}
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && (window as any).fbq) {
+                      (window as any).fbq('track', 'Contact', { method: 'WhatsApp', content_name: 'Navbar' });
+                    }
+                    setIsChatOpen(true);
+                  }}
                   className="flex items-center gap-2 bg-[#0B1221] hover:bg-slate-800 text-white p-2.5 md:px-6 md:py-2.5 rounded-full font-bold text-xs md:text-sm transition-all shadow-md hover:shadow-lg active:scale-95 focus:outline-none focus:ring-4 focus:ring-sky-500/50"
                   aria-label="Abrir chat de atendimento no WhatsApp"
                 >
@@ -1002,6 +1040,9 @@ export default function App() {
                     
                     <button 
                       onClick={() => {
+                        if (typeof window !== 'undefined' && (window as any).fbq) {
+                          (window as any).fbq('track', 'Contact', { method: 'WhatsApp', content_name: 'Mobile Menu' });
+                        }
                         setIsMenuOpen(false);
                         setIsChatOpen(true);
                       }}
@@ -1672,7 +1713,12 @@ export default function App() {
 
       {/* Floating WhatsApp Button */}
       <button 
-        onClick={() => setIsChatOpen(true)}
+        onClick={() => {
+          if (typeof window !== 'undefined' && (window as any).fbq) {
+            (window as any).fbq('track', 'Contact', { method: 'WhatsApp', content_name: 'Floating Button' });
+          }
+          setIsChatOpen(true);
+        }}
         className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform active:scale-95 flex items-center gap-2 group focus:outline-none focus:ring-4 focus:ring-green-500/50"
         aria-label="Abrir chat do WhatsApp"
       >
